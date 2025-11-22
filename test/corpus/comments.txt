@@ -1,21 +1,11 @@
 ==================
-comment
+comments
 ==================
 
 <html>
-  {# comment #}
-  content
-  {% comment optional_label %}
-    content
-  {% endcomment %}
-  content
-  {# {{ variable }} {% statement %} {# comment #} content #}
-  content
-  {% comment optional_label %}
-  {% comment optional_label %}
-  {% comment optional_label %}
-  {% endcomment %}
-  {% endcomment %}
+  {# c #}
+  {% comment %}
+  ignored {{ var }}
   {% endcomment %}
 </html>
 
@@ -23,11 +13,7 @@ comment
 
 (template
   (content)
-  (unpaired_comment)
+  (line_comment)
   (content)
-  (paired_comment)
-  (content)
-  (unpaired_comment)
-  (content)
-  (paired_comment)
+  (block_comment)
   (content))

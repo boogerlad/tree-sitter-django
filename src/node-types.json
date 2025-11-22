@@ -1,6 +1,6 @@
 [
   {
-    "type": "branch_statement",
+    "type": "and_expression",
     "named": true,
     "fields": {},
     "children": {
@@ -8,42 +8,439 @@
       "required": true,
       "types": [
         {
-          "type": "boolean",
+          "type": "and_expression",
           "named": true
         },
         {
-          "type": "keyword",
-          "named": true
-        },
-        {
-          "type": "keyword_operator",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "tag_name",
-          "named": true
-        },
-        {
-          "type": "variable",
+          "type": "not_expression",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "filter",
+    "type": "as_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "assignment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "autoescape_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "autoescape_block",
+          "named": true
+        },
+        {
+          "type": "block_block",
+          "named": true
+        },
+        {
+          "type": "csrf_token_tag",
+          "named": true
+        },
+        {
+          "type": "cycle_tag",
+          "named": true
+        },
+        {
+          "type": "debug_tag",
+          "named": true
+        },
+        {
+          "type": "extends_tag",
+          "named": true
+        },
+        {
+          "type": "filter_block",
+          "named": true
+        },
+        {
+          "type": "firstof_tag",
+          "named": true
+        },
+        {
+          "type": "for_block",
+          "named": true
+        },
+        {
+          "type": "generic_block",
+          "named": true
+        },
+        {
+          "type": "generic_tag",
+          "named": true
+        },
+        {
+          "type": "if_block",
+          "named": true
+        },
+        {
+          "type": "ifchanged_block",
+          "named": true
+        },
+        {
+          "type": "include_tag",
+          "named": true
+        },
+        {
+          "type": "load_tag",
+          "named": true
+        },
+        {
+          "type": "lorem_tag",
+          "named": true
+        },
+        {
+          "type": "now_tag",
+          "named": true
+        },
+        {
+          "type": "partial_tag",
+          "named": true
+        },
+        {
+          "type": "partialdef_block",
+          "named": true
+        },
+        {
+          "type": "querystring_tag",
+          "named": true
+        },
+        {
+          "type": "regroup_tag",
+          "named": true
+        },
+        {
+          "type": "resetcycle_tag",
+          "named": true
+        },
+        {
+          "type": "spaceless_block",
+          "named": true
+        },
+        {
+          "type": "templatetag_tag",
+          "named": true
+        },
+        {
+          "type": "url_tag",
+          "named": true
+        },
+        {
+          "type": "verbatim_block",
+          "named": true
+        },
+        {
+          "type": "widthratio_tag",
+          "named": true
+        },
+        {
+          "type": "with_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block_comment",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "comparison_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "comparison_operand",
+          "named": true
+        },
+        {
+          "type": "comparison_operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comparison_operand",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comparison_operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "csrf_token_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "cycle_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "cycle_value",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cycle_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "i18n_string",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "debug_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "elif_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "test_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "else_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "endif_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "extends_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter_argument",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "lookup",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "filter_chain",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter_call",
     "named": true,
     "fields": {},
     "children": {
@@ -62,27 +459,7 @@
     }
   },
   {
-    "type": "filter_argument",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "filter_name",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "operator",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "paired_comment",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "paired_statement",
+    "type": "filter_chain",
     "named": true,
     "fields": {},
     "children": {
@@ -90,11 +467,79 @@
       "required": true,
       "types": [
         {
-          "type": "boolean",
+          "type": "filter_call",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_call",
           "named": true
         },
         {
-          "type": "branch_statement",
+          "type": "primary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "firstof_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
           "named": true
         },
         {
@@ -102,62 +547,202 @@
           "named": true
         },
         {
-          "type": "end_paired_statement",
+          "type": "filter_expression",
           "named": true
         },
         {
-          "type": "filter",
+          "type": "interpolation",
           "named": true
         },
         {
-          "type": "keyword",
+          "type": "line_comment",
           "named": true
         },
         {
-          "type": "keyword_operator",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "paired_comment",
-          "named": true
-        },
-        {
-          "type": "paired_statement",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "tag_name",
-          "named": true
-        },
-        {
-          "type": "unpaired_comment",
-          "named": true
-        },
-        {
-          "type": "unpaired_statement",
-          "named": true
-        },
-        {
-          "type": "variable",
+          "type": "loop_targets",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "string",
+    "type": "generic_block",
+    "named": true,
+    "fields": {
+      "end_name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "generic_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "tag_argument",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "if_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "if_open",
+          "named": true
+        },
+        {
+          "type": "if_tail",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "if_open",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "test_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "if_tail",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "elif_tag",
+          "named": true
+        },
+        {
+          "type": "else_tag",
+          "named": true
+        },
+        {
+          "type": "endif_tag",
+          "named": true
+        },
+        {
+          "type": "if_tail",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ifchanged_block",
     "named": true,
     "fields": {},
     "children": {
@@ -165,7 +750,404 @@
       "required": false,
       "types": [
         {
-          "type": "filter",
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "include_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "assignment",
+          "named": true
+        },
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interpolation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "i18n_string",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "load_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "library_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "lookup",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "loop_targets",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "loop_target",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "lorem_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "named_url_argument",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "not_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "not_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "now_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "i18n_string",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "or_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "and_expression",
+          "named": true
+        },
+        {
+          "type": "or_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "partial_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "partialdef_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "primary_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "lookup",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "querystring_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "named_url_argument",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "regroup_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "lookup",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "resetcycle_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spaceless_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tag_argument",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "as_alias",
+          "named": true
+        },
+        {
+          "type": "assignment",
+          "named": true
+        },
+        {
+          "type": "filter_expression",
           "named": true
         }
       ]
@@ -181,38 +1163,50 @@
       "required": false,
       "types": [
         {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
           "type": "content",
           "named": true
         },
         {
-          "type": "paired_comment",
+          "type": "interpolation",
           "named": true
         },
         {
-          "type": "paired_statement",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "unpaired_comment",
-          "named": true
-        },
-        {
-          "type": "unpaired_statement",
-          "named": true
-        },
-        {
-          "type": "variable",
+          "type": "line_comment",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "unpaired_statement",
+    "type": "templatetag_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "test_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "or_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "url_tag",
     "named": true,
     "fields": {},
     "children": {
@@ -220,42 +1214,37 @@
       "required": true,
       "types": [
         {
-          "type": "boolean",
+          "type": "filter_expression",
           "named": true
         },
         {
-          "type": "keyword",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "keyword_operator",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "tag_name",
-          "named": true
-        },
-        {
-          "type": "variable",
+          "type": "named_url_argument",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "variable",
+    "type": "verbatim_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "widthratio_tag",
     "named": true,
     "fields": {},
     "children": {
@@ -263,11 +1252,46 @@
       "required": true,
       "types": [
         {
-          "type": "filter",
+          "type": "filter_expression",
           "named": true
         },
         {
-          "type": "variable_name",
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "with_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "assignment",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "content",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "line_comment",
           "named": true
         }
       ]
@@ -275,18 +1299,6 @@
   },
   {
     "type": "!=",
-    "named": false
-  },
-  {
-    "type": "\"",
-    "named": false
-  },
-  {
-    "type": "%}",
-    "named": false
-  },
-  {
-    "type": "'",
     "named": false
   },
   {
@@ -326,8 +1338,44 @@
     "named": false
   },
   {
-    "type": "boolean",
-    "named": true
+    "type": "and",
+    "named": false
+  },
+  {
+    "type": "as",
+    "named": false
+  },
+  {
+    "type": "autoescape",
+    "named": false
+  },
+  {
+    "type": "b",
+    "named": false
+  },
+  {
+    "type": "block",
+    "named": false
+  },
+  {
+    "type": "by",
+    "named": false
+  },
+  {
+    "type": "closeblock",
+    "named": false
+  },
+  {
+    "type": "closebrace",
+    "named": false
+  },
+  {
+    "type": "closecomment",
+    "named": false
+  },
+  {
+    "type": "closevariable",
+    "named": false
   },
   {
     "type": "comment",
@@ -338,36 +1386,260 @@
     "named": true
   },
   {
-    "type": "end_paired_statement",
-    "named": true
+    "type": "csrf_token",
+    "named": false
+  },
+  {
+    "type": "cycle",
+    "named": false
+  },
+  {
+    "type": "debug",
+    "named": false
+  },
+  {
+    "type": "elif",
+    "named": false
+  },
+  {
+    "type": "else",
+    "named": false
+  },
+  {
+    "type": "empty",
+    "named": false
+  },
+  {
+    "type": "end",
+    "named": false
+  },
+  {
+    "type": "endautoescape",
+    "named": false
+  },
+  {
+    "type": "endblock",
+    "named": false
   },
   {
     "type": "endcomment",
     "named": false
   },
   {
-    "type": "keyword",
+    "type": "endfilter",
+    "named": false
+  },
+  {
+    "type": "endfor",
+    "named": false
+  },
+  {
+    "type": "endif",
+    "named": false
+  },
+  {
+    "type": "endifchanged",
+    "named": false
+  },
+  {
+    "type": "endpartialdef",
+    "named": false
+  },
+  {
+    "type": "endspaceless",
+    "named": false
+  },
+  {
+    "type": "endverbatim",
+    "named": false
+  },
+  {
+    "type": "endwith",
+    "named": false
+  },
+  {
+    "type": "extends",
+    "named": false
+  },
+  {
+    "type": "filter",
+    "named": false
+  },
+  {
+    "type": "firstof",
+    "named": false
+  },
+  {
+    "type": "for",
+    "named": false
+  },
+  {
+    "type": "from",
+    "named": false
+  },
+  {
+    "type": "i18n_string",
     "named": true
   },
   {
-    "type": "keyword_operator",
+    "type": "identifier",
     "named": true
+  },
+  {
+    "type": "if",
+    "named": false
+  },
+  {
+    "type": "ifchanged",
+    "named": false
+  },
+  {
+    "type": "in",
+    "named": false
+  },
+  {
+    "type": "include",
+    "named": false
+  },
+  {
+    "type": "inline",
+    "named": false
+  },
+  {
+    "type": "is",
+    "named": false
+  },
+  {
+    "type": "library_item",
+    "named": true
+  },
+  {
+    "type": "line_comment",
+    "named": true
+  },
+  {
+    "type": "load",
+    "named": false
+  },
+  {
+    "type": "loop_target",
+    "named": true
+  },
+  {
+    "type": "lorem",
+    "named": false
+  },
+  {
+    "type": "not",
+    "named": false
+  },
+  {
+    "type": "now",
+    "named": false
   },
   {
     "type": "number",
     "named": true
   },
   {
-    "type": "tag_name",
+    "type": "off",
+    "named": false
+  },
+  {
+    "type": "on",
+    "named": false
+  },
+  {
+    "type": "only",
+    "named": false
+  },
+  {
+    "type": "openblock",
+    "named": false
+  },
+  {
+    "type": "openbrace",
+    "named": false
+  },
+  {
+    "type": "opencomment",
+    "named": false
+  },
+  {
+    "type": "openvariable",
+    "named": false
+  },
+  {
+    "type": "or",
+    "named": false
+  },
+  {
+    "type": "p",
+    "named": false
+  },
+  {
+    "type": "partial",
+    "named": false
+  },
+  {
+    "type": "partialdef",
+    "named": false
+  },
+  {
+    "type": "querystring",
+    "named": false
+  },
+  {
+    "type": "random",
+    "named": false
+  },
+  {
+    "type": "regroup",
+    "named": false
+  },
+  {
+    "type": "resetcycle",
+    "named": false
+  },
+  {
+    "type": "reversed",
+    "named": false
+  },
+  {
+    "type": "silent",
+    "named": false
+  },
+  {
+    "type": "spaceless",
+    "named": false
+  },
+  {
+    "type": "string",
     "named": true
   },
   {
-    "type": "unpaired_comment",
-    "named": true
+    "type": "templatetag",
+    "named": false
   },
   {
-    "type": "variable_name",
-    "named": true
+    "type": "url",
+    "named": false
+  },
+  {
+    "type": "verbatim",
+    "named": false
+  },
+  {
+    "type": "w",
+    "named": false
+  },
+  {
+    "type": "widthratio",
+    "named": false
+  },
+  {
+    "type": "with",
+    "named": false
   },
   {
     "type": "{%",

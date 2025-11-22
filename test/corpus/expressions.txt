@@ -1,143 +1,53 @@
 ==================
-variable
+filter pipelines
 ==================
 
-<html>
-  {{ variable }}
-  {{ variable.item1.item2 }}
-  {{ variable|filter }}
-  {{ variable|filter:argument }}
-  {{ variable|filter:argument.item1.item2 }}
-  {{ variable|filter:"quoted argument" }}
-  {{ variable|filter:"quoted argument, with non-word characters!" }}
-  {{ variable|filter|filter:argument|filter:"quoted argument" }}
-</html>
+{{ foo.bar|lower:"x"|default:42 }}
+{{ _("hi")|upper }}
+{{ -1.5e2|default:foo.bar }}
 
 ---
 
 (template
   (content)
-  (variable
-    (variable_name))
-  (variable
-    (variable_name))
-  (variable
-    (variable_name)
-    (filter
-      (filter_name)))
-  (variable
-    (variable_name)
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (variable
-    (variable_name)
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (variable
-    (variable_name)
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (variable
-    (variable_name)
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (variable
-    (variable_name)
-    (filter
-      (filter_name))
-    (filter
-      (filter_name)
-      (filter_argument))
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (content))
-
-==================
-string
-==================
-
-<html>
-  {{ "string" }}
-  {{ 'string' }}
-  {{ "string"|filter }}
-  {{ 'string'|filter }}
-  {{ "string"|filter:argument }}
-  {{ 'string'|filter:argument }}
-  {{ "string"|filter:argument.item1.item2 }}
-  {{ 'string'|filter:argument.item1.item2 }}
-  {{ "string"|filter:"quoted argument" }}
-  {{ 'string'|filter:'quoted argument' }}
-  {{ "string"|filter:"quoted argument, with non-word characters!" }}
-  {{ 'string'|filter:'quoted argument, with non-word characters!' }}
-  {{ "string"|filter|filter:argument|filter:"quoted argument" }}
-  {{ 'string'|filter|filter:argument|filter:'quoted argument' }}
-</html>
-
----
-
-(template
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)
+          (identifier)))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (literal
+            (string))))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (literal
+            (number))))))
   (content)
-  (string)
-  (string)
-  (string
-    (filter
-      (filter_name)))
-  (string
-    (filter
-      (filter_name)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name))
-    (filter
-      (filter_name)
-      (filter_argument))
-    (filter
-      (filter_name)
-      (filter_argument)))
-  (string
-    (filter
-      (filter_name))
-    (filter
-      (filter_name)
-      (filter_argument))
-    (filter
-      (filter_name)
-      (filter_argument)))
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (literal
+          (i18n_string)))
+      (filter_call
+        (filter_name
+          (identifier)))))
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (literal
+          (number)))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (lookup
+            (identifier)
+            (identifier))))))
   (content))

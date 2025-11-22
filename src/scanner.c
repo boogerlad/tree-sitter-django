@@ -2,59 +2,54 @@
 #include <wctype.h>
 
 enum TokenType {
-    PAIRED_COMMENT_CONTENT
+    COMMENT_BLOCK_CONTENT,
+    VERBATIM_BLOCK_CONTENT,
 };
 
-static void advance(TSLexer *lexer) {
+static inline void advance(TSLexer *lexer) {
     lexer->advance(lexer, false);
 }
 
-static bool scan_str(TSLexer *lexer, const char *str) {
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (lexer->lookahead == str[i]) {
-            advance(lexer);
-        } else {
-            return false;
-        }
-    }
-    return true;
+static inline void skip_whitespace(TSLexer *lexer) {
+    while (iswspace(lexer->lookahead)) advance(lexer);
 }
 
-bool tree_sitter_htmldjango_external_scanner_scan(
-    void *payload,
-    TSLexer *lexer,
-    const bool *valid_symbols
-) {
-    if (valid_symbols[PAIRED_COMMENT_CONTENT]) {
-        int depth = 0;
-        while (lexer->lookahead != 0) {
-            lexer->mark_end(lexer);
+static bool scan_until_end(TSLexer *lexer, const char *end_keyword, enum TokenType result) {
+    for (;;) {
+        if (lexer->lookahead == 0) return false;
 
-            if (lexer->lookahead == '{') {
+        lexer->mark_end(lexer);
+
+        if (lexer->lookahead == '{') {
+            advance(lexer);
+            if (lexer->lookahead == '%') {
                 advance(lexer);
+                skip_whitespace(lexer);
 
-                if (lexer->lookahead == '%') {
+                // Try to match the closing keyword.
+                const char *p = end_keyword;
+                while (*p && lexer->lookahead == *p) {
                     advance(lexer);
-
-                    while (iswspace(lexer->lookahead)) advance(lexer);
-
-                    if (scan_str(lexer, "comment")) {
-                        depth++;
-                        continue;
-                    }
-
-                    if (scan_str(lexer, "endcomment")) {
-                        if (depth == 0) {
-                            lexer->result_symbol = PAIRED_COMMENT_CONTENT;
-                            return true;
-                        }
-                        depth--;
-                    }
+                    p++;
+                }
+                if (*p == '\0') {
+                    lexer->result_symbol = result;
+                    return true;
                 }
             }
-
-            advance(lexer);
         }
+
+        advance(lexer);
+    }
+}
+
+bool tree_sitter_htmldjango_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+    if (valid_symbols[COMMENT_BLOCK_CONTENT]) {
+        return scan_until_end(lexer, "endcomment", COMMENT_BLOCK_CONTENT);
+    }
+
+    if (valid_symbols[VERBATIM_BLOCK_CONTENT]) {
+        return scan_until_end(lexer, "endverbatim", VERBATIM_BLOCK_CONTENT);
     }
 
     return false;
