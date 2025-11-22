@@ -570,11 +570,15 @@
     "named": true,
     "fields": {
       "end_name": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "end",
+            "named": false
+          },
+          {
+            "type": "tag_name",
             "named": true
           }
         ]
@@ -584,7 +588,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "tag_name",
             "named": true
           }
         ]
@@ -630,11 +634,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "tag_argument",
           "named": true
         },
         {
-          "type": "tag_argument",
+          "type": "tag_name",
           "named": true
         }
       ]
@@ -883,7 +887,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
@@ -1231,17 +1235,7 @@
   {
     "type": "verbatim_block",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "widthratio_tag",
@@ -1263,7 +1257,26 @@
     }
   },
   {
-    "type": "with_block",
+    "type": "with_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "with_assignments",
     "named": true,
     "fields": {},
     "children": {
@@ -1273,7 +1286,18 @@
         {
           "type": "assignment",
           "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "with_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
         {
           "type": "block",
           "named": true
@@ -1292,6 +1316,29 @@
         },
         {
           "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "with_assignments",
+          "named": true
+        },
+        {
+          "type": "with_legacy_aliases",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "with_legacy_aliases",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "with_alias",
           "named": true
         }
       ]
@@ -1422,10 +1469,6 @@
     "named": false
   },
   {
-    "type": "endcomment",
-    "named": false
-  },
-  {
     "type": "endfilter",
     "named": false
   },
@@ -1447,10 +1490,6 @@
   },
   {
     "type": "endspaceless",
-    "named": false
-  },
-  {
-    "type": "endverbatim",
     "named": false
   },
   {
@@ -1615,6 +1654,10 @@
   },
   {
     "type": "string",
+    "named": true
+  },
+  {
+    "type": "tag_name",
     "named": true
   },
   {

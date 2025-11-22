@@ -7,7 +7,8 @@ module.exports = grammar({
 
   externals: $ => [
     $._comment_block_content,
-    $._verbatim_block_content
+    $._verbatim_block_content,
+    $._verbatim_start
   ],
 
   conflicts: $ => [
@@ -29,19 +30,20 @@ module.exports = grammar({
 
     _node: $ => choice(
       $.interpolation,
-      $.block,
-      $.line_comment,
       $.block_comment,
+      $.line_comment,
+      $.block,
       $.content
     ),
 
     // Lexical pieces
-    _ws: _ => token(prec(1, /[\t\n\r ]+/)),
-    _tag_end: _ => token(prec(2, seq(optional(/[\t\n\r ]*/), "%}"))),
+    _ws: _ => token(prec(1, /[ \t\r]+/)),
+    _tag_end: _ => token(prec(2, seq(optional(/[ \t\r]+/), "%}"))),
 
-    identifier: _ => token(seq(/[A-Za-z]/, repeat(/\w/))),
+    identifier: _ => token(prec(1, seq(/[A-Za-z0-9]/, repeat(/[A-Za-z0-9_]/)))),
+    tag_name: _ => token(prec(-1, /[A-Za-z0-9][A-Za-z0-9_]*/)),
 
-    number: _ => token(seq(
+    number: _ => token(prec(2, seq(
       optional(choice("+", "-")),
       choice(
         seq(/\d+\.\d+/, optional(seq(/[eE]/, optional(choice("+", "-")), /\d+/))),
@@ -49,7 +51,7 @@ module.exports = grammar({
         seq(/\.\d+/, optional(seq(/[eE]/, optional(choice("+", "-")), /\d+/))),
         seq(/\d+/, optional(seq(/[eE]/, optional(choice("+", "-")), /\d+/)))
       )
-    )),
+    ))),
 
     string: _ => token(choice(
       seq("'", repeat(choice(/[^'\\\n]/, /\\./)), "'"),
@@ -71,8 +73,7 @@ module.exports = grammar({
     line_comment: _ => token(seq("{#", /[^\n#]*(#[^}\n][^\n#]*)*/, "#}")),
     block_comment: $ => seq(
       "{%", optional($._ws), "comment", optional($._ws), $._tag_end,
-      optional($._comment_block_content),
-      "{%", optional($._ws), "endcomment", optional($._ws), $._tag_end
+      $._comment_block_content
     ),
 
     // Interpolations / expressions
@@ -291,20 +292,43 @@ module.exports = grammar({
       repeat(seq(optional($._ws), ",", optional($._ws), $.loop_target))
     )),
 
-    loop_target: _ => token(/[A-Za-z_][^,\s%}]*/),
+    loop_target: _ => token(/[^,\s'"|%}][^,\s'"|%}]*/),
 
     with_block: $ => seq(
       "{%",
       optional($._ws),
       "with",
       $._ws,
-      repeat1(seq($.assignment, optional($._ws))),
+      choice(
+        $.with_assignments,
+        $.with_legacy_aliases
+      ),
       $._tag_end,
       repeat($._node),
       "{%",
       optional($._ws),
       "endwith",
       $._tag_end
+    ),
+
+    with_assignments: $ => repeat1(seq($.assignment, optional($._ws))),
+
+    with_legacy_aliases: $ => seq(
+      $.with_alias,
+      repeat(seq(
+        optional($._ws),
+        "and",
+        optional($._ws),
+        $.with_alias
+      ))
+    ),
+
+    with_alias: $ => seq(
+      $.filter_expression,
+      optional($._ws),
+      "as",
+      optional($._ws),
+      $.identifier
     ),
 
     ifchanged_block: $ => seq(
@@ -381,14 +405,8 @@ module.exports = grammar({
       "{%",
       optional($._ws),
       "verbatim",
-      optional(seq($._ws, $.identifier)),
-      $._tag_end,
-      optional($._verbatim_block_content),
-      "{%",
-      optional($._ws),
-      "endverbatim",
-      optional(seq($._ws, $.identifier)),
-      $._tag_end
+      $._verbatim_start,
+      optional($._verbatim_block_content)
     ),
 
     block_block: $ => seq(
@@ -421,13 +439,25 @@ module.exports = grammar({
       "include",
       $._ws,
       $.filter_expression,
-      optional(seq(
-        $._ws,
-        "with",
-        $._ws,
-        repeat1(seq($.assignment, optional($._ws)))
+      optional(choice(
+        seq(
+          $._ws,
+          "with",
+          $._ws,
+          repeat1(seq($.assignment, optional($._ws))),
+          optional(seq($._ws, "only"))
+        ),
+        seq(
+          $._ws,
+          "only",
+          optional(seq(
+            $._ws,
+            "with",
+            $._ws,
+            repeat1(seq($.assignment, optional($._ws)))
+          ))
+        )
       )),
-      optional(seq($._ws, "only")),
       $._tag_end
     ),
 
@@ -592,10 +622,9 @@ module.exports = grammar({
       "{%",
       optional($._ws),
       "lorem",
-      repeat(seq(
-        $._ws,
-        choice($.filter_expression, "w", "p", "b", "random")
-      )),
+      optional(seq($._ws, $.filter_expression)),
+      optional(seq($._ws, choice("w", "p", "b"))),
+      optional(seq($._ws, "random")),
       $._tag_end
     ),
 
@@ -638,22 +667,23 @@ module.exports = grammar({
     generic_block: $ => prec.left(-5, seq(
       "{%",
       optional($._ws),
-      field("name", $.identifier),
+      field("name", $.tag_name),
       repeat(seq($._ws, $.tag_argument)),
       $._tag_end,
       repeat($._node),
       "{%",
       optional($._ws),
-      "end",
-      field("end_name", $.identifier),
-      repeat(seq($._ws, $.tag_argument)),
+      field("end_name", choice(
+        seq("end", $._ws, $.tag_name),
+        seq("end", $.tag_name)
+      )),
       $._tag_end
     )),
 
     generic_tag: $ => prec(-5, seq(
       "{%",
       optional($._ws),
-      $.identifier,
+      $.tag_name,
       repeat(seq($._ws, $.tag_argument)),
       $._tag_end
     ))
