@@ -32,3 +32,404 @@ for empty verbatim
         (verbatim_block))
       (content)))
   (content))
+
+==================
+with legacy aliases
+==================
+
+{% with a as foo and b.c as bar %}X{% endwith %}
+
+---
+
+(template
+  (content)
+  (block
+    (with_block
+      (with_legacy_aliases
+        (with_alias
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier))))
+          (identifier))
+        (with_alias
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier)
+                (identifier))))
+          (identifier)))
+      (content)))
+  (content))
+
+==================
+include only-with order
+==================
+
+{% include "tmpl.html" only with foo="bar" %}
+
+---
+
+(template
+  (content)
+  (block
+    (include_tag
+      (filter_expression
+        (primary_expression
+          (literal
+            (string))))
+      (assignment
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (literal
+              (string)))))))
+  (content))
+
+==================
+lorem forms
+==================
+
+{% lorem %}
+{% lorem 3 p %}
+{% lorem count random %}
+
+---
+
+(template
+  (content)
+  (block
+    (lorem_tag))
+  (content)
+  (block
+    (lorem_tag
+      (filter_expression
+        (primary_expression
+          (literal
+            (number))))))
+  (content)
+  (block
+    (lorem_tag
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))))
+  (content))
+
+==================
+verbatim suffix match
+==================
+
+{% verbatim custom name %}
+{{ not parsed }}
+{% endverbatim custom name %}
+
+---
+
+(template
+  (content)
+  (block
+    (verbatim_block))
+  (content))
+
+==================
+cycle as silent
+==================
+
+{% cycle 'row1' rowvalue2 'row3' as rowcolors silent %}
+
+---
+
+(template
+  (content)
+  (block
+    (cycle_tag
+      (cycle_value
+        (string))
+      (cycle_value
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (cycle_value
+        (string))
+      (identifier)))
+  (content))
+
+==================
+load from library
+==================
+
+{% load foo bar from baz.qux %}
+
+---
+
+(template
+  (content)
+  (block
+    (load_tag
+      (library_item)
+      (library_item)
+      (library_item)))
+  (content))
+
+==================
+url named args and as
+==================
+
+{% url "view-name" id=foo.slug page=2 as the_url %}
+
+---
+
+(template
+  (content)
+  (block
+    (url_tag
+      (filter_expression
+        (primary_expression
+          (literal
+            (string))))
+      (named_url_argument
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)
+              (identifier)))))
+      (named_url_argument
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (literal
+              (number)))))
+      (identifier)))
+  (content))
+
+==================
+autoescape off block
+==================
+
+{% autoescape off %}
+  {{ x }}
+{% endautoescape %}
+
+---
+
+(template
+  (content)
+  (block
+    (autoescape_block
+      (content)
+      (interpolation
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (content)))
+  (content))
+
+==================
+filter block chain
+==================
+
+{% filter upper|add:"!" %}
+  hi
+{% endfilter %}
+
+---
+
+(template
+  (content)
+  (block
+    (filter_block
+      (filter_chain
+        (filter_call
+          (filter_name
+            (identifier)))
+        (filter_call
+          (filter_name
+            (identifier))
+          (filter_argument
+            (literal
+              (string)))))
+      (content)))
+  (content))
+
+==================
+spaceless block
+==================
+
+{% spaceless %}<p>
+  <a> x </a>
+</p>{% endspaceless %}
+
+---
+
+(template
+  (content)
+  (block
+    (spaceless_block
+      (content)))
+  (content))
+
+==================
+if branching and operators
+==================
+
+{% if a %}yes{% elif c is not None %}maybe{% else %}no{% endif %}
+
+---
+
+(template
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (elif_tag
+          (test_expression
+            (or_expression
+              (and_expression
+                (not_expression
+                  (comparison_expression
+                    (comparison_operand
+                      (filter_expression
+                        (primary_expression
+                          (lookup
+                            (identifier)))))
+                    (comparison_operator)
+                    (comparison_operand
+                      (filter_expression
+                        (primary_expression
+                          (lookup
+                            (identifier)))))))))))
+        (content)
+        (if_tail
+          (else_tag)
+          (content)
+          (endif_tag)))))
+  (content))
+
+==================
+if branching with and
+==================
+{% if a and b %}yes{% elif c is not None %}maybe{% else %}no{% endif %}
+
+---
+
+(template
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (elif_tag
+          (test_expression
+            (or_expression
+              (and_expression
+                (not_expression
+                  (comparison_expression
+                    (comparison_operand
+                      (filter_expression
+                        (primary_expression
+                          (lookup
+                            (identifier)))))
+                    (comparison_operator)
+                    (comparison_operand
+                      (filter_expression
+                        (primary_expression
+                          (lookup
+                            (identifier)))))))))))
+        (content)
+        (if_tail
+          (else_tag)
+          (content)
+          (endif_tag)))))
+  (content))
+
+==================
+for variants
+==================
+
+{% for x in items reversed %}
+  {{ x }}
+{% empty %}
+  none
+{% endfor %}
+{% for key, value in data.items %}
+  {{ key }}: {{ value }}
+{% endfor %}
+
+---
+
+(template
+  (content)
+  (block
+    (for_block
+      (loop_targets
+        (loop_target))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (content)
+      (interpolation
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (content)
+      (content)))
+  (content)
+  (block
+    (for_block
+      (loop_targets
+        (loop_target)
+        (loop_target))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier)
+            (identifier))))
+      (content)
+      (interpolation
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (content)
+      (interpolation
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (content)))
+  (content))

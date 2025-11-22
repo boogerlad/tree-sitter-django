@@ -8,10 +8,6 @@
       "required": true,
       "types": [
         {
-          "type": "and_expression",
-          "named": true
-        },
-        {
           "type": "not_expression",
           "named": true
         }
@@ -258,10 +254,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "comparison_expression",
-          "named": true
-        },
         {
           "type": "comparison_operand",
           "named": true
@@ -969,10 +961,6 @@
         {
           "type": "and_expression",
           "named": true
-        },
-        {
-          "type": "or_expression",
-          "named": true
         }
       ]
     }
@@ -1606,10 +1594,6 @@
   },
   {
     "type": "openvariable",
-    "named": false
-  },
-  {
-    "type": "or",
     "named": false
   },
   {

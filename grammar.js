@@ -12,12 +12,7 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
-    [$.filter_expression, $.lookup],
-    [$.filter_expression, $.test_expression],
-    [$.tag_argument, $.filter_expression],
     [$.generic_block, $.generic_tag],
-    [$.if_block, $.generic_tag],
-    [$.if_block, $.block],
     [$.assignment, $.lookup],
     [$.tag_argument, $.as_alias],
     [$.cycle_value, $.literal],
@@ -37,8 +32,12 @@ module.exports = grammar({
     ),
 
     // Lexical pieces
-    _ws: _ => token(prec(1, /[ \t\r]+/)),
+    _ws: _ => token.immediate(prec(1, /[ \t\r]+/)),
     _tag_end: _ => token(prec(2, seq(optional(/[ \t\r]+/), "%}"))),
+
+    _as_keyword: _ => token(prec(3, "as")),
+    _and_op: _ => token(prec.left(1, seq(/[ \t\r]+/, "and", /[ \t\r]+/))),
+    _or_op: _ => token(prec.left(1, seq(/[ \t\r]+/, "or", /[ \t\r]+/))),
 
     identifier: _ => token(prec(1, seq(/[A-Za-z0-9]/, repeat(/[A-Za-z0-9_]/)))),
     tag_name: _ => token(prec(-1, /[A-Za-z0-9][A-Za-z0-9_]*/)),
@@ -127,25 +126,25 @@ module.exports = grammar({
     // Boolean / comparison expressions used in {% if %}
     test_expression: $ => $.or_expression,
 
-    or_expression: $ => choice(
-      prec.left(1, seq($.or_expression, $._ws, "or", $._ws, $.and_expression)),
-      $.and_expression
-    ),
+    or_expression: $ => prec.left(1, seq(
+      $.and_expression,
+      repeat(seq($._or_op, $.and_expression))
+    )),
 
-    and_expression: $ => choice(
-      prec.left(2, seq($.and_expression, $._ws, "and", $._ws, $.not_expression)),
-      $.not_expression
-    ),
+    and_expression: $ => prec.left(2, seq(
+      $.not_expression,
+      repeat(seq($._and_op, $.not_expression))
+    )),
 
     not_expression: $ => choice(
-      prec(3, seq("not", $._ws, $.not_expression)),
+      prec(1, seq("not", $._ws, $.not_expression)),
       $.comparison_expression
     ),
 
-    comparison_expression: $ => choice(
-      prec.left(4, seq($.comparison_expression, $._ws, $.comparison_operator, $._ws, $.comparison_operand)),
-      $.comparison_operand
-    ),
+    comparison_expression: $ => prec.left(3, seq(
+      $.comparison_operand,
+      repeat(seq($._ws, $.comparison_operator, $._ws, $.comparison_operand))
+    )),
 
     comparison_operand: $ => $.filter_expression,
 
@@ -495,10 +494,11 @@ module.exports = grammar({
       optional($._ws),
       "cycle",
       $._ws,
-      repeat1(seq($.cycle_value, optional($._ws))),
+      $.cycle_value,
+      repeat(seq($._ws, $.cycle_value)),
       optional(seq(
         $._ws,
-        "as",
+        $._as_keyword,
         $._ws,
         $.identifier,
         optional(seq($._ws, "silent"))
@@ -587,7 +587,7 @@ module.exports = grammar({
         $._ws,
         choice($.named_url_argument, $.filter_expression)
       )),
-      optional(seq($._ws, "as", $._ws, $.identifier)),
+      optional(seq($._ws, $._as_keyword, $._ws, $.identifier)),
       $._tag_end
     ),
 

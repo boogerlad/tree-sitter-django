@@ -51,3 +51,21 @@ filter pipelines
             (identifier)
             (identifier))))))
   (content))
+
+==================
+numeric lookup
+==================
+
+{{ arr.0 }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)
+          (identifier)))))
+  (content))
