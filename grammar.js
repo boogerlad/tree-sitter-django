@@ -13,7 +13,6 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.generic_block, $.generic_tag],
-    [$.assignment, $.lookup],
     [$.tag_argument, $.as_alias],
     [$.cycle_value, $.literal],
     [$.lookup, $.named_url_argument],
@@ -35,14 +34,15 @@ module.exports = grammar({
     _ws: _ => token.immediate(prec(1, /[ \t\r]+/)),
     _tag_end: _ => token(prec(2, seq(optional(/[ \t\r]+/), "%}"))),
 
-    _as_keyword: _ => token(prec(3, "as")),
+    _as_keyword: _ => token(prec(5, "as")),
     _and_op: _ => token(prec.left(1, seq(/[ \t\r]+/, "and", /[ \t\r]+/))),
     _or_op: _ => token(prec.left(1, seq(/[ \t\r]+/, "or", /[ \t\r]+/))),
 
-    identifier: _ => token(prec(1, seq(/[A-Za-z0-9]/, repeat(/[A-Za-z0-9_]/)))),
-    tag_name: _ => token(prec(-1, /[A-Za-z0-9][A-Za-z0-9_]*/)),
+    identifier: _ => token(prec(2, seq(/[A-Za-z0-9]/, repeat(/[A-Za-z0-9_]/)))),
+    context_identifier: _ => token(prec(1, /[A-Za-z0-9_][A-Za-z0-9_]*/)),
+    tag_name: _ => token(prec(-1, /[A-Za-z0-9_][A-Za-z0-9_]*/)),
 
-    number: _ => token(prec(2, seq(
+    number: _ => token(prec(3, seq(
       optional(choice("+", "-")),
       choice(
         seq(/\d+\.\d+/, optional(seq(/[eE]/, optional(choice("+", "-")), /\d+/))),
@@ -120,7 +120,7 @@ module.exports = grammar({
       ))
     )),
 
-    filter_name: $ => $.identifier,
+    filter_name: $ => alias($.context_identifier, $.identifier),
     filter_argument: $ => choice($.literal, $.lookup),
 
     // Boolean / comparison expressions used in {% if %}
@@ -178,7 +178,7 @@ module.exports = grammar({
     ),
 
     assignment: $ => seq(
-      $.identifier,
+      alias($.context_identifier, $.identifier),
       optional($._ws),
       "=",
       optional($._ws),
@@ -190,7 +190,7 @@ module.exports = grammar({
       optional($._ws),
       "as",
       optional($._ws),
-      $.identifier
+      alias($.context_identifier, $.identifier)
     ),
 
     // Blocks / tags
@@ -336,7 +336,7 @@ module.exports = grammar({
       optional($._ws),
       "as",
       optional($._ws),
-      $.identifier
+      alias($.context_identifier, $.identifier)
     ),
 
     ifchanged_block: $ => seq(
@@ -422,13 +422,13 @@ module.exports = grammar({
       optional($._ws),
       "block",
       $._ws,
-      $.identifier,
+      alias($.context_identifier, $.identifier),
       $._tag_end,
       repeat($._node),
       "{%",
       optional($._ws),
       "endblock",
-      optional(seq($._ws, $.identifier)),
+      optional(seq($._ws, alias($.context_identifier, $.identifier))),
       $._tag_end
     ),
 
@@ -494,7 +494,7 @@ module.exports = grammar({
       "firstof",
       $._ws,
       repeat1(seq($.filter_expression, optional($._ws))),
-      optional(seq($._ws, "as", $._ws, $.identifier)),
+      optional(seq($._ws, "as", $._ws, alias($.context_identifier, $.identifier))),
       $._tag_end
     ),
 
@@ -509,7 +509,7 @@ module.exports = grammar({
         $._ws,
         $._as_keyword,
         $._ws,
-        $.identifier,
+        alias($.context_identifier, $.identifier),
         optional(seq($._ws, "silent"))
       )),
       $._tag_end
@@ -521,7 +521,7 @@ module.exports = grammar({
       "{%",
       optional($._ws),
       "resetcycle",
-      optional(seq($._ws, $.identifier)),
+      optional(seq($._ws, alias($.context_identifier, $.identifier))),
       $._tag_end
     ),
 
@@ -554,7 +554,7 @@ module.exports = grammar({
       $._ws,
       "as",
       $._ws,
-      $.identifier,
+      alias($.context_identifier, $.identifier),
       $._tag_end
     ),
 
@@ -564,7 +564,7 @@ module.exports = grammar({
       "now",
       $._ws,
       choice($.string, $.i18n_string),
-      optional(seq($._ws, "as", $._ws, $.identifier)),
+      optional(seq($._ws, "as", $._ws, alias($.context_identifier, $.identifier))),
       $._tag_end
     ),
 
@@ -596,17 +596,17 @@ module.exports = grammar({
         $._ws,
         choice($.named_url_argument, $.filter_expression)
       )),
-      optional(seq($._ws, $._as_keyword, $._ws, $.identifier)),
+      optional(seq($._ws, $._as_keyword, $._ws, alias($.context_identifier, $.identifier))),
       $._tag_end
     ),
 
-    named_url_argument: $ => seq(
-      $.identifier,
+    named_url_argument: $ => prec.dynamic(1, seq(
+      alias(choice($.context_identifier, $.identifier), $.identifier),
       optional($._ws),
       "=",
       optional($._ws),
       $.filter_expression
-    ),
+    )),
 
     widthratio_tag: $ => seq(
       "{%",
@@ -622,7 +622,7 @@ module.exports = grammar({
         $._ws,
         "as",
         $._ws,
-        $.identifier
+        alias($.context_identifier, $.identifier)
       )),
       $._tag_end
     ),
@@ -642,14 +642,14 @@ module.exports = grammar({
       optional($._ws),
       "partialdef",
       $._ws,
-      $.identifier,
+      alias($.context_identifier, $.identifier),
       optional(seq($._ws, "inline")),
       $._tag_end,
       repeat($._node),
       "{%",
       optional($._ws),
       choice(
-        seq("endpartialdef", optional(seq($._ws, $.identifier))),
+        seq("endpartialdef", optional(seq($._ws, alias($.context_identifier, $.identifier)))),
         "endpartialdef"
       ),
       $._tag_end
@@ -660,7 +660,7 @@ module.exports = grammar({
       optional($._ws),
       "partial",
       $._ws,
-      $.identifier,
+      alias($.context_identifier, $.identifier),
       $._tag_end
     ),
 

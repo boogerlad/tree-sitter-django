@@ -63,6 +63,28 @@ with legacy aliases
   (content))
 
 ==================
+with underscore alias
+==================
+
+{% with foo as _bar %}X{% endwith %}
+
+---
+
+(template
+  (content)
+  (block
+    (with_block
+      (with_legacy_aliases
+        (with_alias
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier))))
+          (identifier)))
+      (content)))
+  (content))
+
+==================
 include only-with order
 ==================
 
