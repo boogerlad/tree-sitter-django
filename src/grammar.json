@@ -1006,7 +1006,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "[ \\t\\r\\n]+"
+                "value": "[ \\t\\r]+"
               },
               {
                 "type": "STRING",
@@ -1026,7 +1026,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "[ \\t\\r\\n]+"
+                "value": "[ \\t\\r]+"
               },
               {
                 "type": "STRING",

@@ -433,3 +433,42 @@ for variants
               (identifier)))))
       (content)))
   (content))
+
+==================
+newline inside tag treated as text
+==================
+
+{% if a not
+    in b %}
+
+---
+
+(template
+  (content)
+  (ERROR
+    (if_open
+      (ERROR
+        (comparison_operand
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier))))))
+      (test_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (comparison_operand
+                  (filter_expression
+                    (primary_expression
+                      (lookup
+                        (identifier)))))
+                (ERROR
+                  (UNEXPECTED '\n'))
+                (comparison_operator)
+                (comparison_operand
+                  (filter_expression
+                    (primary_expression
+                      (lookup
+                        (identifier)))))))))))
+    (content)))

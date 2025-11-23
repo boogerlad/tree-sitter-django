@@ -149,8 +149,8 @@ module.exports = grammar({
     comparison_operand: $ => $.filter_expression,
 
     comparison_operator: $ => choice(
-      token(seq("not", /[ \t\r\n]+/, "in")),
-      token(seq("is", /[ \t\r\n]+/, "not")),
+      token(seq("not", /[ \t\r]+/, "in")),
+      token(seq("is", /[ \t\r]+/, "not")),
       "in",
       "is",
       "==",
