@@ -250,7 +250,7 @@
       "required": false,
       "types": [
         {
-          "type": "filter_expression",
+          "type": "comment_text",
           "named": true
         }
       ]
@@ -305,15 +305,19 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "cycle_value",
+          "type": "cycle_name",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "cycle_values_alias",
+          "named": true
+        },
+        {
+          "type": "cycle_values_no_alias",
           "named": true
         }
       ]
@@ -337,6 +341,40 @@
         },
         {
           "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cycle_values_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "cycle_value",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cycle_values_no_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "cycle_value",
           "named": true
         }
       ]
@@ -1427,6 +1465,10 @@
     "named": false
   },
   {
+    "type": "comment_text",
+    "named": true
+  },
+  {
     "type": "content",
     "named": true
   },
@@ -1437,6 +1479,10 @@
   {
     "type": "cycle",
     "named": false
+  },
+  {
+    "type": "cycle_name",
+    "named": true
   },
   {
     "type": "debug",

@@ -87,11 +87,12 @@ cycle with reset
   (content)
   (block
     (cycle_tag
-      (cycle_value
-        (string))
-      (cycle_value
-        (string))
-      (identifier)))
+      (cycle_values_alias
+        (cycle_value
+          (string))
+        (cycle_value
+          (string))
+        (identifier))))
   (block
     (resetcycle_tag
       (identifier)))

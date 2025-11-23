@@ -15,9 +15,7 @@ module.exports = grammar({
     [$.generic_block, $.generic_tag],
     [$.tag_argument, $.as_alias],
     [$.cycle_value, $.literal],
-    [$.lookup, $.named_url_argument],
-    [$.lookup, $.regroup_tag],
-    [$.assignment, $.lookup]
+    [$.lookup, $.regroup_tag]
   ],
 
   rules: {
@@ -76,11 +74,16 @@ module.exports = grammar({
       "{%",
       optional($._ws),
       "comment",
-      optional(seq($._ws, $.filter_expression)),
+      optional(seq($._ws, alias($._comment_args, $.comment_text))),
       optional($._ws),
       $._tag_end,
       $._comment_block_content
     ),
+
+    _comment_args: _ => token(prec(-1, /[^%}]+/)),
+
+    comment_argument: $ => choice($.filter_expression, $.comment_text),
+    comment_text: _ => token(prec(-1, /[^%}]+/)),
 
     // Interpolations / expressions
     interpolation: $ => seq(
@@ -177,9 +180,7 @@ module.exports = grammar({
 
     assignment: $ => seq(
       alias(choice($.identifier, $.context_identifier), $.identifier),
-      optional($._ws),
       "=",
-      optional($._ws),
       $.filter_expression
     ),
 
@@ -500,16 +501,34 @@ module.exports = grammar({
       optional($._ws),
       "cycle",
       $._ws,
+      choice(
+        $.cycle_values_alias,
+        $.cycle_values_no_alias,
+        seq(alias($.identifier, $.cycle_name))
+      ),
+      $._tag_end
+    ),
+
+    cycle_values_alias: $ => seq(
       $.cycle_value,
       repeat(seq($._ws, $.cycle_value)),
-      optional(seq(
-        $._ws,
-        $._as_keyword,
-        $._ws,
-        alias($.context_identifier, $.identifier),
-        optional(seq($._ws, "silent"))
-      )),
-      $._tag_end
+      $._ws,
+      $._as_keyword,
+      $._ws,
+      alias($.context_identifier, $.identifier),
+      optional(seq($._ws, "silent"))
+    ),
+
+    cycle_values_no_alias: $ => choice(
+      seq(
+        $.cycle_value,
+        repeat1(seq(",", optional($._ws), $.cycle_value)),
+        optional(seq(",", optional($._ws)))
+      ),
+      seq(
+        $.cycle_value,
+        repeat1(seq($._ws, $.cycle_value))
+      )
     ),
 
     cycle_value: $ => choice($.string, $.i18n_string, $.filter_expression),
@@ -599,9 +618,7 @@ module.exports = grammar({
 
     named_url_argument: $ => prec.dynamic(1, seq(
       alias(choice($.context_identifier, $.identifier), $.identifier),
-      optional($._ws),
       "=",
-      optional($._ws),
       $.filter_expression
     )),
 

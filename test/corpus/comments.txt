@@ -58,6 +58,20 @@ block comment hides tags
   (content))
 
 ==================
+comment tag text args
+==================
+
+{% comment note about foo %}hidden{% endcomment %}
+
+---
+
+(template
+  (content)
+  (block_comment
+    (comment_text))
+  (content))
+
+==================
 block comment hides variables
 ==================
 
@@ -81,10 +95,7 @@ block comment with note
 (template
   (content)
   (block_comment
-    (filter_expression
-      (primary_expression
-        (literal
-          (string)))))
+    (comment_text))
   (content))
 
 ==================
@@ -102,10 +113,7 @@ nested block comments
 (template
   (content)
   (block_comment
-    (filter_expression
-      (primary_expression
-        (lookup
-          (identifier)))))
+    (comment_text))
   (content)
   (block
     (generic_block

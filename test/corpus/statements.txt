@@ -113,6 +113,27 @@ with assignments
   (content))
 
 ==================
+with assignment spaces invalid
+==================
+
+{% with foo =1 %}{% endwith %}
+
+---
+
+(template
+  (content)
+  (ERROR
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier))))
+    (number))
+  (block
+    (generic_tag
+      (tag_name)))
+  (content))
+
+==================
 include valid only trailing
 ==================
 
@@ -218,16 +239,32 @@ cycle as silent
   (content)
   (block
     (cycle_tag
-      (cycle_value
-        (string))
-      (cycle_value
-        (filter_expression
-          (primary_expression
-            (lookup
-              (identifier)))))
-      (cycle_value
-        (string))
-      (identifier)))
+      (cycle_values_alias
+        (cycle_value
+          (string))
+        (cycle_value
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier)))))
+        (cycle_value
+          (string))
+        (identifier))))
+  (content))
+
+==================
+cycle named reuse
+==================
+
+{% cycle rowcolors %}
+
+---
+
+(template
+  (content)
+  (block
+    (cycle_tag
+      (cycle_name)))
   (content))
 
 ==================
@@ -242,11 +279,12 @@ cycle i18n values
   (content)
   (block
     (cycle_tag
-      (cycle_value
-        (i18n_string))
-      (cycle_value
-        (i18n_string))
-      (identifier)))
+      (cycle_values_alias
+        (cycle_value
+          (i18n_string))
+        (cycle_value
+          (i18n_string))
+        (identifier))))
   (content))
 
 ==================
@@ -296,6 +334,34 @@ url named args and as
             (literal
               (number)))))
       (identifier)))
+  (content))
+
+==================
+url named args spacing invalid
+==================
+
+{% url "view-name" id = foo.slug %}
+
+---
+
+(template
+  (content)
+  (block
+    (url_tag
+      (filter_expression
+        (primary_expression
+          (literal
+            (string))))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (ERROR)
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier)
+            (identifier))))))
   (content))
 
 ==================
@@ -718,13 +784,14 @@ cycle nested ifchanged
   (content)
   (block
     (cycle_tag
-      (cycle_value
-        (string))
-      (cycle_value
-        (string))
-      (cycle_value
-        (string))
-      (identifier)))
+      (cycle_values_alias
+        (cycle_value
+          (string))
+        (cycle_value
+          (string))
+        (cycle_value
+          (string))
+        (identifier))))
   (block
     (for_block
       (loop_targets
@@ -741,11 +808,7 @@ cycle nested ifchanged
                 (identifier))))
           (block
             (cycle_tag
-              (cycle_value
-                (filter_expression
-                  (primary_expression
-                    (lookup
-                      (identifier)))))))
+              (cycle_name)))
           (interpolation
             (filter_expression
               (primary_expression
