@@ -69,3 +69,152 @@ numeric lookup
           (identifier)
           (identifier)))))
   (content))
+
+==================
+plain lookup
+==================
+
+{{ user.profile.name }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)
+          (identifier)
+          (identifier)))))
+  (content))
+
+==================
+string literal
+==================
+
+{{ "hi" }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (literal
+          (string)))))
+  (content))
+
+==================
+numeric path segment
+==================
+
+{{ data.0.slug }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)
+          (identifier)
+          (identifier)))))
+  (content))
+
+==================
+filter arg lookup
+==================
+
+{{ var|default_if_none:var2 }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (lookup
+            (identifier))))))
+  (content))
+
+==================
+filter arg i18n string
+==================
+
+{{ value|default_if_none:_("yes") }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (literal
+            (i18n_string))))))
+  (content))
+
+==================
+filter arg dotted lookup
+==================
+
+{{ value|filter:argument.item1.item2 }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (lookup
+            (identifier)
+            (identifier)
+            (identifier))))))
+  (content))
+
+==================
+literal with punctuation arg
+==================
+
+{{ "string"|filter:"quoted argument, with non-word characters!" }}
+
+---
+
+(template
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (literal
+          (string)))
+      (filter_call
+        (filter_name
+          (identifier))
+        (filter_argument
+          (literal
+            (string))))))
+  (content))

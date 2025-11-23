@@ -244,7 +244,17 @@
   {
     "type": "block_comment",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "filter_expression",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "comparison_expression",

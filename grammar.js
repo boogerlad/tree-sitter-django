@@ -16,7 +16,8 @@ module.exports = grammar({
     [$.tag_argument, $.as_alias],
     [$.cycle_value, $.literal],
     [$.lookup, $.named_url_argument],
-    [$.lookup, $.regroup_tag]
+    [$.lookup, $.regroup_tag],
+    [$.assignment, $.lookup]
   ],
 
   rules: {
@@ -31,12 +32,13 @@ module.exports = grammar({
     ),
 
     // Lexical pieces
-    _ws: _ => token.immediate(prec(1, /[ \t\r]+/)),
+    _ws: _ => token(prec(1, /[ \t\r]+/)),
     _tag_end: _ => token(prec(2, seq(optional(/[ \t\r]+/), "%}"))),
 
     _as_keyword: _ => token(prec(5, "as")),
     _and_op: _ => token(prec.left(1, seq(/[ \t\r]+/, "and", /[ \t\r]+/))),
     _or_op: _ => token(prec.left(1, seq(/[ \t\r]+/, "or", /[ \t\r]+/))),
+    _not_keyword: _ => token(prec(4, "not")),
 
     identifier: _ => token(prec(2, seq(/[A-Za-z0-9]/, repeat(/[A-Za-z0-9_]/)))),
     context_identifier: _ => token(prec(1, /[A-Za-z0-9_][A-Za-z0-9_]*/)),
@@ -71,7 +73,12 @@ module.exports = grammar({
     // Comments
     line_comment: _ => token(seq("{#", /[^\n#]*(#[^}\n][^\n#]*)*/, "#}")),
     block_comment: $ => seq(
-      "{%", optional($._ws), "comment", optional($._ws), $._tag_end,
+      "{%",
+      optional($._ws),
+      "comment",
+      optional(seq($._ws, $.filter_expression)),
+      optional($._ws),
+      $._tag_end,
       $._comment_block_content
     ),
 
@@ -137,7 +144,7 @@ module.exports = grammar({
     )),
 
     not_expression: $ => choice(
-      prec(1, seq("not", $._ws, $.not_expression)),
+      prec(1, seq($._not_keyword, $._ws, $.not_expression)),
       $.comparison_expression
     ),
 
@@ -149,7 +156,7 @@ module.exports = grammar({
     comparison_operand: $ => $.filter_expression,
 
     comparison_operator: $ => choice(
-      token(seq("not", /[ \t\r]+/, "in")),
+      token(prec(5, seq("not", /[ \t\r]+/, "in"))),
       token(seq("is", /[ \t\r]+/, "not")),
       "in",
       "is",
@@ -169,7 +176,7 @@ module.exports = grammar({
     ),
 
     assignment: $ => seq(
-      alias($.context_identifier, $.identifier),
+      alias(choice($.identifier, $.context_identifier), $.identifier),
       optional($._ws),
       "=",
       optional($._ws),
@@ -483,9 +490,8 @@ module.exports = grammar({
       "{%",
       optional($._ws),
       "firstof",
-      $._ws,
-      repeat1(seq($.filter_expression, optional($._ws))),
-      optional(seq($._ws, "as", $._ws, alias($.context_identifier, $.identifier))),
+      repeat1(seq($._ws, $.filter_expression)),
+      optional(seq($._ws, $._as_keyword, $._ws, alias($.context_identifier, $.identifier))),
       $._tag_end
     ),
 

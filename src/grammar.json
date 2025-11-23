@@ -36,7 +36,7 @@
       ]
     },
     "_ws": {
-      "type": "IMMEDIATE_TOKEN",
+      "type": "TOKEN",
       "content": {
         "type": "PREC",
         "value": 1,
@@ -130,6 +130,17 @@
               "value": "[ \\t\\r]+"
             }
           ]
+        }
+      }
+    },
+    "_not_keyword": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 4,
+        "content": {
+          "type": "STRING",
+          "value": "not"
         }
       }
     },
@@ -619,6 +630,27 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_ws"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "filter_expression"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
               "type": "SYMBOL",
               "name": "_ws"
             },
@@ -947,8 +979,8 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "STRING",
-                "value": "not"
+                "type": "SYMBOL",
+                "name": "_not_keyword"
               },
               {
                 "type": "SYMBOL",
@@ -1014,21 +1046,25 @@
         {
           "type": "TOKEN",
           "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "not"
-              },
-              {
-                "type": "PATTERN",
-                "value": "[ \\t\\r]+"
-              },
-              {
-                "type": "STRING",
-                "value": "in"
-              }
-            ]
+            "type": "PREC",
+            "value": 5,
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "not"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[ \\t\\r]+"
+                },
+                {
+                  "type": "STRING",
+                  "value": "in"
+                }
+              ]
+            }
           }
         },
         {
@@ -1108,8 +1144,17 @@
         {
           "type": "ALIAS",
           "content": {
-            "type": "SYMBOL",
-            "name": "context_identifier"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "context_identifier"
+              }
+            ]
           },
           "named": true,
           "value": "identifier"
@@ -2805,29 +2850,17 @@
           "value": "firstof"
         },
         {
-          "type": "SYMBOL",
-          "name": "_ws"
-        },
-        {
           "type": "REPEAT1",
           "content": {
             "type": "SEQ",
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "filter_expression"
+                "name": "_ws"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_ws"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "filter_expression"
               }
             ]
           }
@@ -2843,8 +2876,8 @@
                   "name": "_ws"
                 },
                 {
-                  "type": "STRING",
-                  "value": "as"
+                  "type": "SYMBOL",
+                  "name": "_as_keyword"
                 },
                 {
                   "type": "SYMBOL",
@@ -4134,6 +4167,10 @@
     [
       "lookup",
       "regroup_tag"
+    ],
+    [
+      "assignment",
+      "lookup"
     ]
   ],
   "precedences": [],

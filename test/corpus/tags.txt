@@ -1,0 +1,400 @@
+==================
+extends and blocks
+==================
+
+{% extends "base.html" %}
+{% block content %}Hello{% endblock content %}
+
+---
+
+(template
+  (content)
+  (block
+    (extends_tag
+      (filter_expression
+        (primary_expression
+          (literal
+            (string))))))
+  (content)
+  (block
+    (block_block
+      (identifier)
+      (content)
+      (identifier)))
+  (content))
+
+==================
+ifchanged with else
+==================
+
+{% ifchanged total %}A{% else %}B{% endifchanged %}
+
+---
+
+(template
+  (content)
+  (block
+    (ifchanged_block
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (content)
+      (content)))
+  (content))
+
+==================
+firstof with as
+==================
+
+{% firstof a b "fallback" as chosen %}{{ chosen }}
+
+---
+
+(template
+  (content)
+  (block
+    (firstof_tag
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (filter_expression
+        (primary_expression
+          (literal
+            (string))))
+      (identifier)))
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))))
+  (content))
+
+==================
+cycle with reset
+==================
+
+{% cycle 'a' 'b' as rowcolors %}{% resetcycle rowcolors %}
+
+---
+
+(template
+  (content)
+  (block
+    (cycle_tag
+      (cycle_value
+        (string))
+      (cycle_value
+        (string))
+      (identifier)))
+  (block
+    (resetcycle_tag
+      (identifier)))
+  (content))
+
+==================
+regroup tag
+==================
+
+{% regroup items by category as grouped %}
+
+---
+
+(template
+  (content)
+  (block
+    (regroup_tag
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (identifier)
+      (identifier)))
+  (content))
+
+==================
+widthratio with assignment
+==================
+
+{% widthratio a b 100 as pct %}[{{ pct }}]
+
+---
+
+(template
+  (content)
+  (block
+    (widthratio_tag
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (filter_expression
+        (primary_expression
+          (literal
+            (number))))
+      (identifier)))
+  (content)
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))))
+  (content))
+
+==================
+now tag with asvar
+==================
+
+{% now "jS F" as formatted %}{{ formatted }}
+
+---
+
+(template
+  (content)
+  (block
+    (now_tag
+      (string)
+      (identifier)))
+  (interpolation
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))))
+  (content))
+
+==================
+querystring named args
+==================
+
+{% querystring page=2 q=term %}
+
+---
+
+(template
+  (content)
+  (block
+    (querystring_tag
+      (named_url_argument
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (literal
+              (number)))))
+      (named_url_argument
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))))
+  (content))
+
+==================
+querystring positional and named
+==================
+
+{% querystring request.path q=term %}
+
+---
+
+(template
+  (content)
+  (block
+    (querystring_tag
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier)
+            (identifier))))
+      (named_url_argument
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))))
+  (content))
+
+==================
+templatetag braces
+==================
+
+{% templatetag openbrace %}{% templatetag closebrace %}
+
+---
+
+(template
+  (content)
+  (block
+    (templatetag_tag))
+  (block
+    (templatetag_tag))
+  (content))
+
+==================
+simple partial
+==================
+
+{% partialdef snippet %}Inner{% endpartialdef %}{% partial snippet %}
+
+---
+
+(template
+  (content)
+  (block
+    (partialdef_block
+      (identifier)
+      (content)))
+  (block
+    (partial_tag
+      (identifier)))
+  (content))
+
+==================
+partialdef inline and end name
+==================
+
+{% partialdef snippet inline %}Body{% endpartialdef snippet %}
+
+---
+
+(template
+  (content)
+  (block
+    (partialdef_block
+      (identifier)
+      (content)
+      (identifier)))
+  (content))
+
+==================
+debug tag
+==================
+
+{% debug %}
+
+---
+
+(template
+  (content)
+  (block
+    (debug_tag))
+  (content))
+
+==================
+csrf token tag
+==================
+
+{% csrf_token %}
+
+---
+
+(template
+  (content)
+  (block
+    (csrf_token_tag))
+  (content))
+
+==================
+generic tag
+==================
+
+{% static "admin/base.css" %}
+
+---
+
+(template
+  (content)
+  (block
+    (generic_tag
+      (tag_name)
+      (tag_argument
+        (filter_expression
+          (primary_expression
+            (literal
+              (string)))))))
+  (content))
+
+==================
+generic tag as alias
+==================
+
+{% static "admin/app.js" as asset_url %}
+
+---
+
+(template
+  (content)
+  (block
+    (generic_tag
+      (tag_name)
+      (tag_argument
+        (as_alias
+          (filter_expression
+            (primary_expression
+              (literal
+                (string))))
+          (identifier)))))
+  (content))
+
+==================
+generic block
+==================
+
+{% cache 60 fragment %}Cached{% endcache %}
+
+---
+
+(template
+  (content)
+  (block
+    (generic_block
+      name: (tag_name)
+      (tag_argument
+        (filter_expression
+          (primary_expression
+            (literal
+              (number)))))
+      (tag_argument
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (content)
+      end_name: (tag_name)))
+  (content))
+
+==================
+generic block as alias
+==================
+
+{% wrapper data as wrapped %}{{ wrapped }}{% endwrapper %}
+
+---
+
+(template
+  (content)
+  (block
+    (generic_block
+      (tag_name)
+      (tag_argument
+        (as_alias
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier))))
+          (identifier)))
+      (interpolation
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))
+      (tag_name)))
+  (content))

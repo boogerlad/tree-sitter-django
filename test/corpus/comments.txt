@@ -17,3 +17,113 @@ comments
   (content)
   (block_comment)
   (content))
+
+==================
+line comment with braces
+==================
+
+foo{# {% #}
+
+---
+
+(template
+  (content)
+  (line_comment)
+  (content))
+
+==================
+line comment with percent then text
+==================
+
+foo{# %} #}bar
+
+---
+
+(template
+  (content)
+  (line_comment)
+  (content))
+
+==================
+block comment hides tags
+==================
+
+{% comment %} {% if %} {% endcomment %}
+
+---
+
+(template
+  (content)
+  (block_comment)
+  (content))
+
+==================
+block comment hides variables
+==================
+
+foo{% comment %}{{ x }}{% endcomment %}bar
+
+---
+
+(template
+  (content)
+  (block_comment)
+  (content))
+
+==================
+block comment with note
+==================
+
+{% comment "note" %}hidden{% endcomment %}
+
+---
+
+(template
+  (content)
+  (block_comment
+    (filter_expression
+      (primary_expression
+        (literal
+          (string)))))
+  (content))
+
+==================
+nested block comments
+==================
+
+{% comment optional_label %}
+{% comment optional_label %}
+{% comment optional_label %}
+{% endcomment %}
+{% endcomment %}
+{% endcomment %}
+---
+
+(template
+  (content)
+  (block_comment
+    (filter_expression
+      (primary_expression
+        (lookup
+          (identifier)))))
+  (content)
+  (block
+    (generic_block
+      (tag_name)
+      (content)
+      (tag_name))))
+
+==================
+block comment with random shit
+==================
+
+{# {{ variable }} {% statement %} {# comment #} content #}
+
+---
+
+(template
+  (content)
+  (line_comment)
+  (content)
+  (content)
+  (content))

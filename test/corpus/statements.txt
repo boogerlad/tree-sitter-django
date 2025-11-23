@@ -85,6 +85,34 @@ with underscore alias
   (content))
 
 ==================
+with assignments
+==================
+
+{% with foo=1 bar=baz %}X{% endwith %}
+
+---
+
+(template
+  (content)
+  (block
+    (with_block
+      (with_assignments
+        (assignment
+          (identifier)
+          (filter_expression
+            (primary_expression
+              (literal
+                (number)))))
+        (assignment
+          (identifier)
+          (filter_expression
+            (primary_expression
+              (lookup
+                (identifier))))))
+      (content)))
+  (content))
+
+==================
 include valid only trailing
 ==================
 
@@ -105,8 +133,7 @@ include valid only trailing
         (filter_expression
           (primary_expression
             (literal
-              (string))))))
-  )
+              (string)))))))
   (content))
 
 ==================
@@ -130,8 +157,7 @@ include valid only-with order
         (filter_expression
           (primary_expression
             (literal
-              (string))))))
-  )
+              (string)))))))
   (content))
 
 ==================
@@ -201,6 +227,25 @@ cycle as silent
               (identifier)))))
       (cycle_value
         (string))
+      (identifier)))
+  (content))
+
+==================
+cycle i18n values
+==================
+
+{% cycle _("one") _("two") as choice %}
+
+---
+
+(template
+  (content)
+  (block
+    (cycle_tag
+      (cycle_value
+        (i18n_string))
+      (cycle_value
+        (i18n_string))
       (identifier)))
   (content))
 
@@ -370,13 +415,39 @@ if branching and operators
   (content))
 
 ==================
-if branching with and
+ifchanged with args
 ==================
-{% if a and b %}yes{% elif c is not None %}maybe{% else %}no{% endif %}
+
+{% ifchanged a b %}yes{% else %}no{% endifchanged %}
 
 ---
 
 (template
+  (content)
+  (block
+    (ifchanged_block
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (content)
+      (content)))
+  (content))
+
+==================
+if with and/or
+==================
+
+{% if a and b or c %}yes{% else %}no{% endif %}
+
+---
+
+(template
+  (content)
   (block
     (if_block
       (if_open
@@ -396,66 +467,173 @@ if branching with and
                     (filter_expression
                       (primary_expression
                         (lookup
+                          (identifier))))))))
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
                           (identifier)))))))))))
       (content)
       (if_tail
-        (elif_tag
-          (test_expression
-            (or_expression
-              (and_expression
-                (not_expression
-                  (comparison_expression
-                    (comparison_operand
-                      (filter_expression
-                        (primary_expression
-                          (lookup
-                            (identifier)))))
-                    (comparison_operator)
-                    (comparison_operand
-                      (filter_expression
-                        (primary_expression
-                          (lookup
-                            (identifier)))))))))))
+        (else_tag)
         (content)
-        (if_tail
-          (else_tag)
-          (content)
-          (endif_tag)))))
+        (endif_tag))))
   (content))
 
 ==================
-for variants
+if unary not
 ==================
 
-{% for x in items reversed %}
-  {{ x }}
-{% empty %}
-  none
-{% endfor %}
-{% for key, value in data.items %}
-  {{ key }}: {{ value }}
-{% endfor %}
+{% if not user.is_active %}inactive{% endif %}
 
 ---
 
 (template
   (content)
   (block
-    (for_block
-      (loop_targets
-        (loop_target))
-      (filter_expression
-        (primary_expression
-          (lookup
-            (identifier))))
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (not_expression
+                  (comparison_expression
+                    (comparison_operand
+                      (filter_expression
+                        (primary_expression
+                          (lookup
+                            (identifier)
+                            (identifier))))))))))))
       (content)
-      (interpolation
-        (filter_expression
-          (primary_expression
-            (lookup
-              (identifier)))))
+      (if_tail
+        (endif_tag))))
+  (content))
+
+==================
+if comparison operators
+==================
+
+{% if a == b != c < d <= e > f >= g %}cmp{% endif %}
+{% if item in items %}in{% endif %}
+{% if item not in items %}notin{% endif %}
+
+---
+
+(template
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
       (content)
-      (content)))
+      (if_tail
+        (endif_tag))))
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (endif_tag))))
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (endif_tag))))
+  (content))
+
+==================
+for reversed unpack with empty
+==================
+
+{% for x, y in items reversed %}{{ x }}{{ y }}{% empty %}none{% endfor %}
+
+---
+
+(template
   (content)
   (block
     (for_block
@@ -465,15 +643,12 @@ for variants
       (filter_expression
         (primary_expression
           (lookup
-            (identifier)
             (identifier))))
-      (content)
       (interpolation
         (filter_expression
           (primary_expression
             (lookup
               (identifier)))))
-      (content)
       (interpolation
         (filter_expression
           (primary_expression
@@ -483,40 +658,143 @@ for variants
   (content))
 
 ==================
-newline inside tag treated as text
+regroup then unpack
 ==================
 
-{% if a not
-    in b %}
+{% regroup data by bar as grouped %}{% for grouper, group in grouped %}{{ grouper }}{% endfor %}
 
 ---
 
 (template
   (content)
-  (ERROR
-    (if_open
-      (ERROR
-        (comparison_operand
+  (block
+    (regroup_tag
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (identifier)
+      (identifier)))
+  (block
+    (for_block
+      (loop_targets
+        (loop_target)
+        (loop_target))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (interpolation
+        (filter_expression
+          (primary_expression
+            (lookup
+              (identifier)))))))
+  (content))
+
+==================
+resetcycle undefined
+==================
+
+{% resetcycle undefinedcycle %}
+
+---
+
+(template
+  (content)
+  (block
+    (resetcycle_tag
+      (identifier)))
+  (content))
+
+==================
+cycle nested ifchanged
+==================
+
+{% cycle 'a' 'b' 'c' as cycler silent %}{% for x in values %}{% ifchanged x %}{% cycle cycler %}{{ cycler }}{% else %}{{ cycler }}{% endifchanged %}{% endfor %}
+
+---
+
+(template
+  (content)
+  (block
+    (cycle_tag
+      (cycle_value
+        (string))
+      (cycle_value
+        (string))
+      (cycle_value
+        (string))
+      (identifier)))
+  (block
+    (for_block
+      (loop_targets
+        (loop_target))
+      (filter_expression
+        (primary_expression
+          (lookup
+            (identifier))))
+      (block
+        (ifchanged_block
           (filter_expression
             (primary_expression
               (lookup
-                (identifier))))))
-      (test_expression
-        (or_expression
-          (and_expression
-            (not_expression
-              (comparison_expression
-                (comparison_operand
-                  (filter_expression
-                    (primary_expression
-                      (lookup
-                        (identifier)))))
-                (ERROR
-                  (UNEXPECTED '\n'))
-                (comparison_operator)
-                (comparison_operand
-                  (filter_expression
-                    (primary_expression
-                      (lookup
-                        (identifier)))))))))))
+                (identifier))))
+          (block
+            (cycle_tag
+              (cycle_value
+                (filter_expression
+                  (primary_expression
+                    (lookup
+                      (identifier)))))))
+          (interpolation
+            (filter_expression
+              (primary_expression
+                (lookup
+                  (identifier)))))
+          (interpolation
+            (filter_expression
+              (primary_expression
+                (lookup
+                  (identifier)))))))))
+  (content))
+
+==================
+load unknown tag
+==================
+
+{% load debugtags %}{% go_boom %}
+
+---
+
+(template
+  (content)
+  (block
+    (load_tag
+      (library_item)))
+  (block
+    (generic_tag
+      (tag_name)))
+  (content))
+
+==================
+unterminated blocktranslate
+==================
+
+{% load i18n %}{% blocktranslate %}This should fail{% blocktranslate %}
+
+---
+
+(template
+  (content)
+  (block
+    (load_tag
+      (library_item)))
+  (block
+    (generic_tag
+      (ERROR)
+      (tag_name)))
+  (ERROR
+    (content)
+    (ERROR)
+    (tag_name)
     (content)))
