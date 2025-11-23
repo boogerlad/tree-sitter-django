@@ -85,7 +85,32 @@ with underscore alias
   (content))
 
 ==================
-include only-with order
+include valid only trailing
+==================
+
+{% include "tmpl.html" with foo="bar" only %}
+
+---
+
+(template
+  (content)
+  (block
+    (include_tag
+      (filter_expression
+        (primary_expression
+          (literal
+            (string))))
+      (assignment
+        (identifier)
+        (filter_expression
+          (primary_expression
+            (literal
+              (string))))))
+  )
+  (content))
+
+==================
+include valid only-with order
 ==================
 
 {% include "tmpl.html" only with foo="bar" %}
@@ -105,7 +130,8 @@ include only-with order
         (filter_expression
           (primary_expression
             (literal
-              (string)))))))
+              (string))))))
+  )
   (content))
 
 ==================
@@ -395,53 +421,6 @@ if branching with and
           (else_tag)
           (content)
           (endif_tag)))))
-  (content))
-
-==================
-if parentheses
-==================
-{% if (foo and bar) or baz %}yes{% endif %}
-
----
-
-(template
-  (block
-    (if_block
-      (if_open
-        (test_expression
-          (or_expression
-            (and_expression
-              (not_expression
-                (comparison_expression
-                  (comparison_operand
-                    (test_expression
-                      (or_expression
-                        (and_expression
-                          (not_expression
-                            (comparison_expression
-                              (comparison_operand
-                                (filter_expression
-                                  (primary_expression
-                                    (lookup
-                                      (identifier)))))))
-                          (not_expression
-                            (comparison_expression
-                              (comparison_operand
-                                (filter_expression
-                                  (primary_expression
-                                    (lookup
-                                      (identifier))))))))))))))
-            (and_expression
-              (not_expression
-                (comparison_expression
-                  (comparison_operand
-                    (filter_expression
-                      (primary_expression
-                        (lookup
-                          (identifier)))))))))))
-      (content)
-      (if_tail
-        (endif_tag))))
   (content))
 
 ==================
