@@ -376,6 +376,53 @@ if branching with and
   (content))
 
 ==================
+if parentheses
+==================
+{% if (foo and bar) or baz %}yes{% endif %}
+
+---
+
+(template
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (test_expression
+                      (or_expression
+                        (and_expression
+                          (not_expression
+                            (comparison_expression
+                              (comparison_operand
+                                (filter_expression
+                                  (primary_expression
+                                    (lookup
+                                      (identifier)))))))
+                          (not_expression
+                            (comparison_expression
+                              (comparison_operand
+                                (filter_expression
+                                  (primary_expression
+                                    (lookup
+                                      (identifier))))))))))))))
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (endif_tag))))
+  (content))
+
+==================
 for variants
 ==================
 

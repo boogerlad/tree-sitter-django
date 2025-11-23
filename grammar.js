@@ -146,7 +146,16 @@ module.exports = grammar({
       repeat(seq($._ws, $.comparison_operator, $._ws, $.comparison_operand))
     )),
 
-    comparison_operand: $ => $.filter_expression,
+    comparison_operand: $ => choice(
+      $.filter_expression,
+      seq(
+        "(",
+        optional($._ws),
+        $.test_expression,
+        optional($._ws),
+        ")"
+      )
+    ),
 
     comparison_operator: $ => choice(
       token(seq("not", /[ \t\r]+/, "in")),

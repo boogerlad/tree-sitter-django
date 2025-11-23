@@ -276,6 +276,10 @@
         {
           "type": "filter_expression",
           "named": true
+        },
+        {
+          "type": "test_expression",
+          "named": true
         }
       ]
     }
@@ -1334,6 +1338,14 @@
   },
   {
     "type": "!=",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
     "named": false
   },
   {
