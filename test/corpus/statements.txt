@@ -861,3 +861,159 @@ unterminated blocktranslate
     (ERROR)
     (tag_name)
     (content)))
+
+==================
+if comparison after and
+==================
+
+{% if a == b and c != d %}yes{% endif %}
+
+---
+
+(template
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (endif_tag))))
+  (content))
+
+==================
+if comparison after or
+==================
+
+{% if a == b or c != d %}yes{% endif %}
+
+---
+
+(template
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier))))))))
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (endif_tag))))
+  (content))
+
+==================
+if mixed comparisons with and or
+==================
+
+{% if a == b and c != d or e >= f %}yes{% endif %}
+
+---
+
+(template
+  (content)
+  (block
+    (if_block
+      (if_open
+        (test_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier))))))))
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))
+                  (comparison_operator)
+                  (comparison_operand
+                    (filter_expression
+                      (primary_expression
+                        (lookup
+                          (identifier)))))))))))
+      (content)
+      (if_tail
+        (endif_tag))))
+  (content))
